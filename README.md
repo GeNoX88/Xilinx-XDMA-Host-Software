@@ -7,7 +7,7 @@ This part introduces how to set up host PC and run program to write/read data to
 ### Get Source Codes
 Clone this repo to your host PC:
 ```shell
-$ git clone --recursive https://github.com/wengwz/Xilinx-XDMA-Host-Software.git
+$ git clone --recursive https://github.com/GeNoX88/Xilinx-XDMA-Host-Software.git
 ```
 This command also downloads offical XDMA driver from [dma_ip_drivers](https://github.com/Xilinx/dma_ip_drivers).
 
