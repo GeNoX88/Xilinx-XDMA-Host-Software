@@ -48,12 +48,12 @@ int dev_write (int dev_fd, uint64_t addr, void *buffer, uint64_t size) {
     return 0;
 }
 
-// function : get_millisecond
-// description : get time in millisecond
-static uint64_t get_millisecond () {
+// function : get_microsecond
+// description : get time in microsecond
+static uint64_t get_microsecond () {
     struct timeval tv;
     gettimeofday(&tv, NULL);
-    return (uint64_t)tv.tv_sec * 1000 + (uint64_t)(tv.tv_usec / 1000);
+    return (uint64_t)tv.tv_sec * 1000000 + (uint64_t)(tv.tv_usec);
 }
 
 uint64_t getopt_integer(char *optarg)
@@ -104,7 +104,7 @@ char USAGE [] =
 int main (int argc, char *argv[]) {
     int   ret = -1;
 
-    uint64_t millisecond;
+    uint64_t microsecond;
     char usage_string [1024];
     char mode_string  [8];
     
@@ -214,7 +214,7 @@ int main (int argc, char *argv[]) {
     printf("** Transaction Count: %lu\n", trans_count);
     printf("** AXI Address: %lu\n", address);
 
-    millisecond = get_millisecond(); // get start time of DMA operation
+    microsecond = get_microsecond(); // get start time of DMA operation
     temp_buffer = buffer;
     for (uint64_t i = 0; i < trans_count; i++) {
         if (mode == 1) {
@@ -230,7 +230,7 @@ int main (int argc, char *argv[]) {
         }
         temp_buffer += trans_size;
     }
-    millisecond = get_millisecond() - millisecond; // get duration of DMA operation
+    microsecond = get_microsecond() - microsecond; // get duration of DMA operation
 
     if (mode == 0) { // write data from memory to file (read mode)
         if (total_size != fwrite(buffer, 1, total_size, file_p)) {
@@ -239,10 +239,10 @@ int main (int argc, char *argv[]) {
         }
     }
 
-    millisecond = (millisecond > 0) ? millisecond : 1;
-    double data_rate = (double)total_size / millisecond;
+    microsecond = (microsecond > 0) ? microsecond : 1;
+    double data_rate = (double)total_size / microsecond;
     printf("** Complete %s XDMA %s\n", mode_string ,dev_name);
-    printf("** Total Time=%lu ms   Data Rate=%.1lf KBps\n", millisecond, data_rate);
+    printf("** Total Time=%lu us   Data Rate=%.1lf MBps\n", microsecond, data_rate);
     ret = 0;
     
 close_and_clear:
